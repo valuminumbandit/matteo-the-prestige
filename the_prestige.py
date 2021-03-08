@@ -673,6 +673,24 @@ class StartDraftCommand(Command):
     """
 
     async def execute(self, msg, command):
+        lineup_rounds = 12
+        pitcher_rounds = 1
+        try:
+            if "-p " in command.split("\n")[0]:
+                pitcher_rounds = int(command.split("\n")[0].split("-p ")[1].split("-")[0].strip())
+            elif "--pitchers " in command.split("\n")[0]:
+                pitcher_rounds = int(command.split("\n")[0].split("--pitchers ")[1].split("-")[0].strip())
+        except ValueError:
+            await msg.channel.send("Make sure you put an integer after the -p flag.")
+            return
+                                       
+        if pitcher_rounds < 1:
+            await msg.channel.send("No pitchers? Someone's gotta do it.") # !!! REPLACE WITH SAKI COPY ASAP
+            return
+                                       
+        if pitcher_rounds > 8:
+            await msg.channel.send("That's too many pitchers. Keep it to eight or less.") # !!! REPLACE WITH SAKI COPY ASAP
+                
         draft = Draft.make_draft()
         mentions = {f'<@!{m.id}>' for m in msg.mentions}
         content = msg.content.split('\n')[1:]  # drop command out of message
