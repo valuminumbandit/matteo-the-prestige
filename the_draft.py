@@ -8,6 +8,8 @@ import onomancer
 DRAFT_SIZE = 20
 REFRESH_DRAFT_SIZE = 4  # fewer players remaining than this and the list refreshes
 DRAFT_ROUNDS = 13
+PITCHER_ROUND = 13
+PITCHER_AMT = 1
 
 Participant = namedtuple('Participant', ['handle', 'team'])
 BOOKMARK = Participant(handle="bookmark", team=None)  # keep track of start/end of draft round
@@ -60,6 +62,14 @@ class Draft:
         team.name = team_name
         team.slogan = slogan
         self._participants.append(Participant(handle=handle, team=team))
+    
+    def set_size(self, pitchers):
+        """
+        Sets the size of the draft, based on how many players of each type need drafting.
+        """
+        DRAFT_ROUNDS = 12 + pitchers # This is going to come back to bite me later - V
+        PITCHER_ROUND = lineups + 1
+        PITCHER_AMT = pitchers
 
     def start_draft(self):
         """
